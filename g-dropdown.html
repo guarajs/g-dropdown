@@ -1,0 +1,96 @@
+<polymer-element name="g-dropdown" attributes="label value options type noOptionAllowed">
+	<template>
+		<link rel="stylesheet" href="g-dropdown.css">
+		<div id="container" class="dropdown">
+			<button on-click="{{ toggleOpen }}" class="btn btn-{{ type }}" type="button" id="dropdownMenu" _style="width: 400px;">
+				{{ label }} <span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu">
+				<template if="{{ noOptionAllowed }}">
+					<li role="presentation">
+						<a on-click="{{ optionChanged }}" role="menuitem" data-idx="reset" tabindex="-1" href="#">
+							--
+						</a>
+					</li>
+				</template>
+				<template repeat="{{ op, i in options }}">
+					<template if="{{ i > 0 && (!op.label || op.header) }}">
+						<li role="presentation" class="divider"></li>
+					</template>
+					<template if="{{ op.header }}">
+						<li role="presentation" class="dropdown-header">{{ op.label }}</li>
+					</template>
+					<template if="{{ op.label && !op.header}}">
+						<li role="presentation">
+							<a on-click="{{ optionChanged }}" role="menuitem" data-idx="{{ i }}" tabindex="-1" href="#">
+								{{ op.label }}
+							</a>
+						</li>
+					</template>
+				</template>
+			</ul>
+		</div>
+	</template>
+	<script>
+    	Polymer('g-dropdown', {
+    		
+    		value           : null,
+    		noOptionAllowed : true,
+    		originalLabel   : null,
+    		type            : "default",
+    		options         : [],
+    		
+    		ready: function() {
+    			if(!this.originalLabel)
+    			{
+	    			this.originalLabel = this.label;
+    			}
+    		},
+    		
+			toggleOpen: function(event, detail, sender) {
+				$(this.$.container).toggleClass("open");
+			},
+			
+			optionsChanged: function(oldVal, newVal) {
+				//console.log("Options changed: ", oldVal, newVal);
+			},
+			
+			clear: function() {
+				this.label = this.originalLabel;
+				this.value = null;
+			},
+			
+			optionChanged: function(event, detail, sender) {
+				event.preventDefault();
+				/*
+				 * TODO: 	try to use target.templateInstance.model
+				 * See: 	https://www.polymer-project.org/docs/polymer/databinding.html
+				 */
+				$(this.$.container).toggleClass("open");
+				var idx = $(sender).data('idx');
+				var op  = null;
+				if("reset" == idx)
+				{
+					this.clear();
+				}
+				else
+				{
+					op = this.options[idx];
+					this.label = op.label;
+					this.value = op.value ? op.value : op.label;
+
+					if(op.onClick)
+					{
+						op.onClick(event, detail, sender);
+					}
+					else if(op.href)
+					{
+						window.location = op.href;
+					}
+				}
+				
+				this.fire('option-changed', {option: op});
+			}
+    	});
+	</script>
+</polymer-element>
