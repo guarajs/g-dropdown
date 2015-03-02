@@ -20,7 +20,7 @@
 					<template if="{{ op.header }}">
 						<li role="presentation" class="dropdown-header">{{ op.label }}</li>
 					</template>
-					<template if="{{ op.label && !op.header}}">
+					<template if="{{ op.label && !op.header }}">
 						<li role="presentation">
 							<a on-click="{{ optionChanged }}" role="menuitem" data-idx="{{ i }}" tabindex="-1" href="#">
 								{{ op.label }}

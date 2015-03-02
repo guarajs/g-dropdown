@@ -1,0 +1,28 @@
+<link rel="import" href="g-dropdown.html">
+
+<polymer-element name="g-dropdown-sample">
+	<template>
+		<link rel="stylesheet" href="g-dropdown.css">
+		<dl class="dl-horizontal" style="margin: 30px 0px;">
+			<dt>Label:</dt>
+			<dd><input class="form-control" type="text" value="{{ label }}" /></dd>
+			<dt>Type:</dt>
+			<dd><input class="form-control" type="text" value="{{ type }}" /></dd>
+		</dl>
+		<g-dropdown label="{{ label }}" type="{{ type }}" options="{{ options }}"></g-dropdown>
+	</template>
+	<script>
+		Polymer({
+			label: 'Sample Label',
+			type: 'primary',
+			options: [
+				{label: 'Group 1', header: true},
+				{label: 'Option 1'},
+				{label: 'Option 2'},
+				{label: 'Group 2', header: true},
+				{label: 'Option 3'},
+				{label: 'Option 4'}
+			],
+    	});
+	</script>
+</polymer-element>
