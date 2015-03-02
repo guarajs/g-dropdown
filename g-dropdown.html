@@ -8,7 +8,7 @@
 			<ul class="dropdown-menu">
 				<template if="{{ noOptionAllowed }}">
 					<li role="presentation">
-						<a on-click="{{ optionChanged }}" role="menuitem" data-idx="reset" tabindex="-1" href="#">
+						<a on-click="{{ optionChanged }}" role="menuitem" tabindex="-1" href="#">
 							--
 						</a>
 					</li>
@@ -22,7 +22,7 @@
 					</template>
 					<template if="{{ op.label && !op.header }}">
 						<li role="presentation">
-							<a on-click="{{ optionChanged }}" role="menuitem" data-idx="{{ i }}" tabindex="-1" href="#">
+							<a on-click="{{ optionChanged }}" role="menuitem" tabindex="-1" href="#">
 								{{ op.label }}
 							</a>
 						</li>
@@ -51,10 +51,6 @@
 				$(this.$.container).toggleClass("open");
 			},
 			
-			optionsChanged: function(oldVal, newVal) {
-				//console.log("Options changed: ", oldVal, newVal);
-			},
-			
 			clear: function() {
 				this.label = this.originalLabel;
 				this.value = null;
@@ -62,20 +58,14 @@
 			
 			optionChanged: function(event, detail, sender) {
 				event.preventDefault();
-				/*
-				 * TODO: 	try to use target.templateInstance.model
-				 * See: 	https://www.polymer-project.org/docs/polymer/databinding.html
-				 */
 				$(this.$.container).toggleClass("open");
-				var idx = $(sender).data('idx');
-				var op  = null;
-				if("reset" == idx)
+				var op = event.target.templateInstance.model.op;
+				if(!op)
 				{
 					this.clear();
 				}
 				else
 				{
-					op = this.options[idx];
 					this.label = op.label;
 					this.value = op.value ? op.value : op.label;
 
